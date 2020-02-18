@@ -34,6 +34,7 @@
           </v-simple-table>
         </v-card-text>
       </v-card>
+      <v-btn block color="primary" class="mr-4" @click="voltar">Voltar</v-btn>
     </v-col>
     <v-col cols="12" sm="10" md="6" lg="5">
       <v-card>
