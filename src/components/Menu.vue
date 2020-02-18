@@ -3,151 +3,97 @@
     <!-- HEADER -->
     <v-row class="text-center">
       <v-col cols="12">
-        <v-img :src="require('../assets/logo.svg')" class="my-3" contain height="200" />
-      </v-col>
-      <v-col class="mb-4">
-        <h1 class="display-2 font-weight-bold mb-3">Bem vindo ao UcommeX</h1>
+        <v-img :src="require('../assets/logo.svg')" class="my-3" contain height="100" />
       </v-col>
     </v-row>
     <!-- FORMULARIO -->
-    <v-row class="text-center" justify="center">
-      <v-col col="10" sm="8" md="8" lg="6">
-        <v-form ref="form" :lazy-validation="true" @submit.prevent="submit">
-          <v-text-field
-            hint="Digite apenas números."
-            class="inputNumber"
-            type="number"
-            outlined
-            clearable
-            v-model="cpf"
-            counter
-            :rules="cpfRules"
-            label="CPF"
-            required
-          ></v-text-field>
-          <v-btn color="primary" class="mr-4" @click="submit">Submit</v-btn>
-        </v-form>
+    <Search v-model="data" />
+    <!-- MENU -->
+    <v-row v-if="mostraMenu" ref="menu" justify="center">
+      <v-col cols="12" sm="8" md="8" lg="6">
+        <v-container>
+          <h2 class="text-center">{{data.nome | capitalize}}</h2>
+          <v-row justify="space-around">
+            <v-col v-for="item in menu" :key="item.title" cols="6">
+              <v-btn color="primary" block height="150px" @click="toggle(item)">
+                <div class="flex-column justify-space-between">
+                  <div class="mb-6">
+                    <v-icon x-large>{{item.icon}}</v-icon>
+                  </div>
+                  <div>{{item.title}}</div>
+                </div>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-container>
       </v-col>
-      <v-col cols="12"></v-col>
     </v-row>
     <!-- CARDS -->
-    <v-row justify="center" v-if="data" ref="stats">
-      <v-col cols="12" sm="10" md="6" lg="5">
-        <v-card>
-          <v-card-title class="headline justify-center">{{data.nome | capitalize}}</v-card-title>
-          <v-card-text>
-            <v-simple-table :height="height" :fixedHeader="fixedHeader">
-              <tbody>
-                <tr>
-                  <td>Data de nascimento:</td>
-                  <td>{{data.dataNascimento | moment("DD/MM/YYYY")}}</td>
-                </tr>
-                <tr>
-                  <td>Data de cadastro:</td>
-                  <td>{{data.dataCadastro | moment("DD/MM/YYYY")}}</td>
-                </tr>
-                <tr>
-                  <td>Compras já feitas:</td>
-                  <td>{{data.quantidadeCompras}}</td>
-                </tr>
-                <tr>
-                  <td>Loja Preferencial:</td>
-                  <td>{{data.lojaPreferida.nomeLoja}} ({{data.lojaPreferida.quantidadeCompras}})</td>
-                </tr>
-                <tr>
-                  <td>Vendedor Preferido:</td>
-                  <td>{{data.vendedorPreferido.nomeVendedor}} ({{data.vendedorPreferido.quantidadeCompras}})</td>
-                </tr>
-                <tr>
-                  <td>Ticket Médio:</td>
-                  <td>{{data.ticketMedio}}</td>
-                </tr>
-              </tbody>
-            </v-simple-table>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="12" sm="10" md="6" lg="5">
-        <v-card>
-          <v-card-title class="headline justify-center">Ultimas Compras</v-card-title>
-          <v-card-text>
-            <v-simple-table :height="height" :fixedHeader="fixedHeader">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Valor</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in data.ultimasCompras" :key="item.data">
-                  <td>{{ item.data | moment("DD/MM/YYYY")}}</td>
-                  <td>{{ item.totalGasto }}</td>
-                </tr>
-              </tbody>
-            </v-simple-table>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col cols="12" sm="10" md="12" lg="10">
-        <v-card>
-          <v-card-title class="headline justify-center">Preferencias</v-card-title>
-          <v-card-text>
-            <v-simple-table :height="height" :fixedHeader="fixedHeader">
-              <thead>
-                <tr>
-                  <th>Categoria</th>
-                  <th>Linha</th>
-                  <th>Cor</th>
-                  <th>Tamanho</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in data.preferencias" :key="item.idProduto">
-                  <td>{{ item.categoria }}</td>
-                  <td>{{ item.linha }}</td>
-                  <td>{{ item.cor }}</td>
-                  <td>{{ item.tamanho }}</td>
-                  <td>{{ item.quantidadeTotal }}</td>
-                </tr>
-              </tbody>
-            </v-simple-table>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+    <Dados :data="data" v-if="estados.dados" v-model="estados.dados" />
+    <Preferencias :data="data" v-if="estados.preferencias" v-model="estados.preferencias" />
+    <Cliente v-if="estados.cliente" v-model="estados.cliente" />
+    <Vendedor v-if="estados.vendedor" v-model="estados.vendedor" />
   </v-container>
 </template>
 
 <script>
-import axios from "axios";
+import Preferencias from "@/components/Preferencias";
+import Dados from "@/components/Dados";
+import Cliente from "@/components/Cliente";
+import Vendedor from "@/components/Vendedor";
+import Search from "@/components/Search";
 
 export default {
+  components: {
+    Preferencias,
+    Dados,
+    Cliente,
+    Vendedor,
+    Search
+  },
   name: "Menu",
   data: () => ({
-    cpf: "",
-    cpfRules: [
-      v => !!v || "CPF é obrigatório",
-    //   v => (v && v.length >= 11) || "O CPF deve ter 11 caracteres."
-    ],
     data: "",
-    height: 300,
-    fixedHeader: true
-  }),
-  methods: {
-    submit() {
-      if (this.$refs.form.validate()) {
-        axios
-          .get("https://ucommex-resource-server.herokuapp.com/customer/stats?cpf=" + this.cpf, {
-            crossdomain: true
-          })
-          .then(response => {
-            this.data = response.data;
-          })
-          .catch(error => {
-            console.log(error);
-          });
+    cpf: "",
+    estados: {
+      dados: false,
+      preferencias: false,
+      cliente: false,
+      vendedor: false
+    },
+    menu: [
+      {
+        title: "Dados",
+        icon: "fa-user",
+        id: "dados"
+      },
+      {
+        title: "Preferências",
+        icon: "fa-smile",
+        id: "pref"
+      },
+      {
+        title: "Cliente",
+        icon: "fa-comment-alt",
+        id: "cliente"
+      },
+      {
+        title: "Vendedor",
+        icon: "fa-file-signature",
+        id: "vendedor"
       }
+    ]
+  }),
+  computed: {
+    mostraMenu: function() {
+      return (
+        !(
+          this.estados.dados ||
+          this.estados.preferencias ||
+          this.estados.cliente ||
+          this.estados.vendedor
+        ) && this.data != ""
+      );
     }
   },
   filters: {
@@ -160,25 +106,21 @@ export default {
         .join(" ");
     }
   },
-  watch: {
-    data: function() {
-      this.$nextTick(function() {
-        this.$vuetify.goTo(this.$refs.stats, {
-          duration: 400,
-          offset: 0,
-          easing: "easeInOutCubic"
-        });
-      });
+  methods: {
+    toggle: function(item) {
+      console.log(this.estados.dados);
+      if (item.id == "dados") this.estados.dados = !this.estados.dados;
+      if (item.id == "pref")
+        this.estados.preferencias = !this.estados.preferencias;
+      if (item.id == "cliente") this.estados.cliente = !this.estados.cliente;
+      if (item.id == "vendedor") this.estados.vendedor = !this.estados.vendedor;
+      console.log(this.estados.dados);
     }
   }
 };
 </script>
 
 <style>
-.capitalize {
-  text-transform: capitalize;
-}
-
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
