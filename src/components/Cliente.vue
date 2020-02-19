@@ -4,63 +4,35 @@
       <v-card>
         <v-card-title class="headline justify-center">Cliente</v-card-title>
         <v-card-text>
-          <v-radio-group dense label="1. Converteu?" v-model="converteu" :mandatory="false">
-            <v-radio label="Sim" :value="true"></v-radio>
-            <v-radio label="Nao" :value="false"></v-radio>
-          </v-radio-group>
-          <v-radio-group v-if="!converteu" class="mt-0" dense label="Qual motivo?">
-            <v-radio label="Falta do produto de interesse (Tamanho, cor, modelo)" value="a"></v-radio>
-            <v-radio label="Preço" value="b"></v-radio>
-            <v-radio label="Pesquisa de preço" value="c"></v-radio>
-            <v-radio label="Passeando" value="d"></v-radio>
+          <v-radio-group
+            dense
+            label="1. Como foi seu atendimento em relação a sua última compra conosco?"
+            v-model="infoAtendimento"
+          >
+            <v-radio label="Melhor" value="melhor"></v-radio>
+            <v-radio label="Pior" value="pior"></v-radio>
+            <v-radio label="Igual" value="igual"></v-radio>
           </v-radio-group>
           <v-radio-group
             dense
-            label="2. Qual a sua percepção sobre o perfil de atendimento do cliente?"
+            label="2. Como foi seu atendimento em relação a sua última compra em outra loja?"
+            v-model="infoAtendimentoOutraLoja"
+            class="mb-4"
           >
-            <v-radio label="Carente" value="a"></v-radio>
-            <v-radio label="Auto-serviço" value="b"></v-radio>
-            <v-radio label="Impaciente" value="c"></v-radio>
-            <v-radio label="Abordagem Moderada" value="d"></v-radio>
+            <v-radio label="Melhor" value="melhor"></v-radio>
+            <v-radio label="Pior" value="pior"></v-radio>
+            <v-radio label="Igual" value="igual"></v-radio>
           </v-radio-group>
-          <v-radio-group
-            dense
-            label="3. Os dados pessoais do cliente ajudaram na abordagem?"
-            v-model="dadosPessoaisAjudaram"
-          >
-            <v-radio label="Sim" :value="true"></v-radio>
-            <v-radio label="Não" :value="false"></v-radio>
-          </v-radio-group>
-          <v-text-field
-            v-if="!dadosPessoaisAjudaram"
-            outlined
-            placeholder="Digite aqui"
-            dense
-            label="Faltou alguma informação?"
-          ></v-text-field>
-          <v-radio-group
-            dense
-            label="4. Os dados históricos do cliente ajudaram no atendimento?"
-            v-model="dadosHistoricosAjudaram"
-          >
-            <v-radio label="Sim" :value="true"></v-radio>
-            <v-radio label="Não" :value="false"></v-radio>
-          </v-radio-group>
-          <v-text-field
-            v-if="!dadosHistoricosAjudaram"
-            outlined
-            placeholder="Digite aqui"
-            dense
-            label="Faltou alguma informação?"
-          ></v-text-field>
-          <v-radio-group
-            dense
-            label="5. As informações ajudaram na empatia/experiência de compra do cliente?"
-            v-model="informacoesAjudaram"
-          >
-            <v-radio label="Sim" :value="true"></v-radio>
-            <v-radio label="Não" :value="false"></v-radio>
-          </v-radio-group>
+          <v-label>3. Qual a chance de você recomendar a nossa empresa para um amigo?</v-label>
+          <v-slider
+            v-model="nps"
+            :tick-labels="['0','1','2','3','4','5','6','7','8','9','10']"
+            ticks="always"
+            tick-size="2"
+            persistent-hint
+            max="10"
+            thumb-label
+          ></v-slider>
         </v-card-text>
       </v-card>
       <v-btn block color="primary" @click="voltar">Submeter</v-btn>
@@ -76,11 +48,9 @@ export default {
     event: "show"
   },
   data: () => ({
-    radios: "radio-1",
-    converteu: true,
-    dadosPessoaisAjudaram: true,
-    dadosHistoricosAjudaram: true,
-    informacoesAjudaram: true
+    infoAtendimento: "melhor",
+    infoAtendimentoOutraLoja: "melhor",
+    nps: '5'
   }),
   methods: {
     voltar() {

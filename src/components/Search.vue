@@ -14,7 +14,7 @@
           label="CPF"
           required
         ></v-text-field>
-        <v-btn color="primary"  @click="submit">Procurar</v-btn>
+        <v-btn color="primary" :loading="loading" @click="submit">Procurar</v-btn>
       </v-form>
     </v-col>
   </v-row>
@@ -30,6 +30,7 @@ export default {
     event: "change"
   },
   data: () => ({
+    loading: false,
     cpf: "",
     cpfRules: [
       v => !!v || "CPF é obrigatório"
@@ -39,6 +40,7 @@ export default {
   methods: {
     submit() {
       if (this.$refs.form.validate()) {
+        this.loading = true;
         axios
           .get(
             "https://ucommex-resource-server.herokuapp.com/customer/stats?cpf=" +
@@ -48,6 +50,7 @@ export default {
             }
           )
           .then(response => {
+            this.loading = false;
             this.$emit("change", response.data);
           })
           .catch(error => {
