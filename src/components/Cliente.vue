@@ -36,7 +36,7 @@
             outlined
             placeholder="Digite aqui"
             dense
-            label="Se não, faltou alguma informação?"
+            label="Faltou alguma informação?"
           ></v-text-field>
           <v-radio-group
             dense
@@ -51,7 +51,7 @@
             outlined
             placeholder="Digite aqui"
             dense
-            label="Se não, faltou alguma informação?"
+            label="Faltou alguma informação?"
           ></v-text-field>
           <v-radio-group
             dense
