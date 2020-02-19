@@ -14,7 +14,7 @@
           label="CPF"
           required
         ></v-text-field>
-        <v-btn color="primary" class="mr-4" @click="submit">Submit</v-btn>
+        <v-btn color="primary"  @click="submit">Procurar</v-btn>
       </v-form>
     </v-col>
   </v-row>

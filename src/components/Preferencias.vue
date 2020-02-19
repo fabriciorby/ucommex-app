@@ -26,7 +26,7 @@
           </v-simple-table>
         </v-card-text>
       </v-card>
-      <v-btn block color="primary" class="mr-4" @click="voltar">Voltar</v-btn>
+      <v-btn block color="primary" @click="voltar">Voltar</v-btn>
     </v-col>
   </v-row>
 </template>
