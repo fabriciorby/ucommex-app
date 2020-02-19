@@ -28,7 +28,6 @@ export default {
   components: {
     Menu
   },
-
   data: () => ({
   })
 };
