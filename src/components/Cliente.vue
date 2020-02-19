@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center" ref="stats">
-    <v-col cols="12" sm="10" md="12" lg="10">
+    <v-col cols="11" sm="8" md="8" lg="6">
       <v-card>
         <v-card-title class="headline justify-center">Cliente</v-card-title>
         <v-card-text>
