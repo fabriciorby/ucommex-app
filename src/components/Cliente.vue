@@ -38,7 +38,7 @@
         </v-card-text>
         <v-row>
           <v-col cols="6" class="pa-0 pl-3">
-            <v-btn block tile large color="primary" :loading="loading" @click="voltar">Voltar</v-btn>
+            <v-btn block tile large color="primary" :disabled="loading" @click="voltar">Voltar</v-btn>
           </v-col>
           <v-col cols="6" class="pa-0 pr-3">
             <v-btn block tile large color="primary" :loading="loading" @click="submit">Submeter</v-btn>
@@ -85,6 +85,7 @@ export default {
           this.voltar();
         })
         .catch(error => {
+          this.loading = false;
           console.log(error);
         });
     }
