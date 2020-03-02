@@ -32,7 +32,7 @@
     <Dados :data="data" v-if="estados.dados" v-model="estados.dados" />
     <Preferencias :data="data" v-if="estados.preferencias" v-model="estados.preferencias" />
     <Cliente :cpf="data.cpf" v-if="estados.cliente" v-model="estados.cliente" />
-    <Vendedor v-if="estados.vendedor" v-model="estados.vendedor" />
+    <Vendedor :cpf="data.cpf" v-if="estados.vendedor" v-model="estados.vendedor" />
   </v-container>
 </template>
 

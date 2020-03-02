@@ -74,9 +74,22 @@
               <v-radio label="Sim" :value="true"></v-radio>
               <v-radio label="Não" :value="false"></v-radio>
             </v-radio-group>
+            <v-text-field
+              outlined
+              placeholder="Digite aqui"
+              v-model="idLojista"
+              label="Identificação do lojista"
+            ></v-text-field>
           </v-form>
         </v-card-text>
-        <v-btn block color="primary" :loading="loading" @click="submit">Submeter</v-btn>
+        <v-row>
+          <v-col cols="6" class="pa-0 pl-3">
+            <v-btn block tile large color="primary" :loading="loading" @click="voltar">Voltar</v-btn>
+          </v-col>
+          <v-col cols="6" class="pa-0 pr-3">
+            <v-btn block tile large color="primary" :loading="loading" @click="submit">Submeter</v-btn>
+          </v-col>
+        </v-row>
       </v-card>
     </v-col>
   </v-row>
@@ -87,12 +100,14 @@ import axios from "axios";
 
 export default {
   name: "Vendedor",
+  props: ["cpf"],
   model: {
     prop: "teste",
     event: "show"
   },
   data: () => ({
     loading: false,
+    idLojista: "",
     converteu: true,
     motivoNaoConverteu: "",
     dadosPessoaisAjudaram: true,
@@ -110,6 +125,8 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true;
         let data = {
+          idLojista: this.idLojista,
+          cpfCliente: this.cpf,
           converteu: this.converteu,
           motivoNaoConverteu: this.motivoNaoConverteu,
           dadosPessoaisAjudaram: this.dadosPessoaisAjudaram,

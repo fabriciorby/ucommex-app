@@ -36,7 +36,14 @@
             ></v-slider>
           </v-form>
         </v-card-text>
-        <v-btn block color="primary" @click="submit">Submeter</v-btn>
+        <v-row>
+          <v-col cols="6" class="pa-0 pl-3">
+            <v-btn block tile large color="primary" :loading="loading" @click="voltar">Voltar</v-btn>
+          </v-col>
+          <v-col cols="6" class="pa-0 pr-3">
+            <v-btn block tile large color="primary" :loading="loading" @click="submit">Submeter</v-btn>
+          </v-col>
+        </v-row>
       </v-card>
     </v-col>
   </v-row>
@@ -59,10 +66,10 @@ export default {
   }),
   methods: {
     voltar() {
-      console.log(this.cpf);
       this.$emit("show", false);
     },
     submit() {
+      this.loading = true;
       let data = {
         cpf: this.cpf,
         infoAtendimento: this.infoAtendimento,
