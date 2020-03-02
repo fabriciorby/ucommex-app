@@ -31,7 +31,7 @@
     <!-- CARDS -->
     <Dados :data="data" v-if="estados.dados" v-model="estados.dados" />
     <Preferencias :data="data" v-if="estados.preferencias" v-model="estados.preferencias" />
-    <Cliente v-if="estados.cliente" v-model="estados.cliente" />
+    <Cliente :cpf="data.cpf" v-if="estados.cliente" v-model="estados.cliente" />
     <Vendedor v-if="estados.vendedor" v-model="estados.vendedor" />
   </v-container>
 </template>
@@ -54,7 +54,6 @@ export default {
   name: "Menu",
   data: () => ({
     data: "",
-    cpf: "",
     estados: {
       dados: false,
       preferencias: false,

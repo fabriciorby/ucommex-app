@@ -4,45 +4,50 @@
       <v-card>
         <v-card-title class="headline justify-center">Cliente</v-card-title>
         <v-card-text>
-          <v-radio-group
-            dense
-            label="1. Como foi seu atendimento em relação a sua última compra conosco?"
-            v-model="infoAtendimento"
-          >
-            <v-radio label="Melhor" value="melhor"></v-radio>
-            <v-radio label="Pior" value="pior"></v-radio>
-            <v-radio label="Igual" value="igual"></v-radio>
-          </v-radio-group>
-          <v-radio-group
-            dense
-            label="2. Como foi seu atendimento em relação a sua última compra em outra loja?"
-            v-model="infoAtendimentoOutraLoja"
-            class="mb-4"
-          >
-            <v-radio label="Melhor" value="melhor"></v-radio>
-            <v-radio label="Pior" value="pior"></v-radio>
-            <v-radio label="Igual" value="igual"></v-radio>
-          </v-radio-group>
-          <v-label>3. Qual a chance de você recomendar a nossa empresa para um amigo?</v-label>
-          <v-slider
-            v-model="nps"
-            :tick-labels="['0','1','2','3','4','5','6','7','8','9','10']"
-            ticks="always"
-            tick-size="2"
-            persistent-hint
-            max="10"
-            thumb-label
-          ></v-slider>
+          <v-form ref="form" :lazy-validation="true" @submit.prevent="submit">
+            <v-radio-group
+              dense
+              label="1. Como foi seu atendimento em relação a sua última compra conosco?"
+              v-model="infoAtendimento"
+            >
+              <v-radio label="Melhor" value="melhor"></v-radio>
+              <v-radio label="Pior" value="pior"></v-radio>
+              <v-radio label="Igual" value="igual"></v-radio>
+            </v-radio-group>
+            <v-radio-group
+              dense
+              label="2. Como foi seu atendimento em relação a sua última compra em outra loja?"
+              v-model="infoAtendimentoOutraLoja"
+              class="mb-4"
+            >
+              <v-radio label="Melhor" value="melhor"></v-radio>
+              <v-radio label="Pior" value="pior"></v-radio>
+              <v-radio label="Igual" value="igual"></v-radio>
+            </v-radio-group>
+            <v-label>3. Qual a chance de você recomendar a nossa empresa para um amigo?</v-label>
+            <v-slider
+              v-model="nps"
+              :tick-labels="['0','1','2','3','4','5','6','7','8','9','10']"
+              ticks="always"
+              tick-size="2"
+              persistent-hint
+              max="10"
+              thumb-label
+            ></v-slider>
+          </v-form>
         </v-card-text>
+        <v-btn block color="primary" @click="submit">Submeter</v-btn>
       </v-card>
-      <v-btn block color="primary" @click="voltar">Submeter</v-btn>
     </v-col>
   </v-row>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "Cliente",
+  props: ["cpf"],
   model: {
     prop: "teste",
     event: "show"
@@ -50,11 +55,31 @@ export default {
   data: () => ({
     infoAtendimento: "melhor",
     infoAtendimentoOutraLoja: "melhor",
-    nps: '5'
+    nps: "5"
   }),
   methods: {
     voltar() {
+      console.log(this.cpf);
       this.$emit("show", false);
+    },
+    submit() {
+      let data = {
+        cpf: this.cpf,
+        infoAtendimento: this.infoAtendimento,
+        infoAtendimentoOutraLoja: this.infoAtendimentoOutraLoja,
+        nps: this.nps
+      };
+      axios
+        .post(`${process.env.VUE_APP_API}/feedback/customer`, data, {
+          crossdomain: true
+        })
+        .then(() => {
+          this.loading = false;
+          this.voltar();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };

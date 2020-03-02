@@ -42,15 +42,12 @@ export default {
       if (this.$refs.form.validate()) {
         this.loading = true;
         axios
-          .get(
-            "https://ucommex-resource-server.herokuapp.com/customer/stats?cpf=" +
-              this.cpf,
-            {
-              crossdomain: true
-            }
-          )
+          .get(`${process.env.VUE_APP_API}/customer/stats?cpf=${this.cpf}`, {
+            crossdomain: true
+          })
           .then(response => {
             this.loading = false;
+            response.data.cpf = this.cpf;
             this.$emit("change", response.data);
           })
           .catch(error => {
