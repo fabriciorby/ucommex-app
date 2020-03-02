@@ -60,6 +60,7 @@ export default {
     event: "show"
   },
   data: () => ({
+    loading: false,
     infoAtendimento: "melhor",
     infoAtendimentoOutraLoja: "melhor",
     nps: "5"
